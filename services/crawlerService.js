@@ -1,14 +1,15 @@
 const axios = require('axios');
 
+const C = require('../constants');
 const kafkaProducer = require('../kafkaProducer');
 const KafkaConsumer = require('../kafkaConsumer');
-const {Readability} = require('@mozilla/readability');
+const { Readability } = require('@mozilla/readability');
 const { JSDOM } = require('jsdom');
 
-class LinkService {
-static async listenToLinkContentTopic() {
+class CrawlerService {
+static async listenToTopic() {
 
-    const consumer = await KafkaConsumer.getConsumer({topic: 'link-content-topic', groupId: 'link-service-group'});
+    const consumer = await KafkaConsumer.getConsumer({topic: C.FIRST_SERVICE, groupId: `${C.FIRST_SERVICE}-group`});
 
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
@@ -16,7 +17,8 @@ static async listenToLinkContentTopic() {
             try {
                 console.log(`Received message from ${topic}:`, link);
                 const parsedContent = await this.fetchAndParseLink(link);
-                await kafkaProducer.produceMessage('scheduling-topic', {
+
+                await kafkaProducer.produceMessage(C.ORCHESTRATOR, {
                     content: parsedContent,
                     nextStage: nextStage
                 });
@@ -24,7 +26,7 @@ static async listenToLinkContentTopic() {
                 } catch (error) {
                     console.error('Error processing message:', error.message);
                     const nextRetryCount = retryCount + 1;
-                    await kafkaProducer.produceMessage('scheduling-topic', {
+                    await kafkaProducer.produceMessage(C.ORCHESTRATOR, {
                         error: error.message,
                         nextStage: topic,
                         retryCount: nextRetryCount,
@@ -54,4 +56,4 @@ static async listenToLinkContentTopic() {
     }
 }
 
-module.exports = LinkService;
+module.exports = CrawlerService;

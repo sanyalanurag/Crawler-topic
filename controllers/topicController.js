@@ -1,3 +1,4 @@
+const C = require('../constants');
 const express = require('express');
 const kafkaProducer = require('../kafkaProducer');
 
@@ -8,7 +9,7 @@ router.post('/submit-link', async (req, res) => {
         console.log("Request received:", req.body);
         const link = req.body.link;
 
-        await kafkaProducer.produceMessage('scheduling-topic', { link, nextStage: 'link-content-topic' });
+        await kafkaProducer.produceMessage(C.ORCHESTRATOR, { link, nextStage: C.FIRST_SERVICE });
 
         res.json({
             success: true,

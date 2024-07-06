@@ -1,4 +1,4 @@
-const { link } = require("../controllers/topicController");
+const C = require('../constants');
 
 class MessageFactory {
     static createMessage(currStage, data) {
@@ -6,20 +6,20 @@ class MessageFactory {
         let messagePayload;
 
         if (data.retryCount > 3) {
-            outputTopic = 'dead-letter-topic';
+            outputTopic = C.DEAD_LETTER;
             messagePayload = {link: data.link, content: data.content};
             return { outputTopic, messagePayload };
         }
         outputTopic = currStage;
 
         switch (currStage) {
-            case 'link-content-topic':
-                messagePayload = { link: data.link, nextStage: 'readability-service-topic', retryCount: data.retryCount + 1};
+            case C.FIRST_SERVICE:
+                messagePayload = { link: data.link, nextStage: C.SECOND_SERVICE, retryCount: data.retryCount + 1};
                 break;
-            case 'readability-service-topic':
-                messagePayload = { content: data.content, nextStage: 'topic-service-topic', retryCount: data.retryCount + 1 }; // Adjusted for example
+            case C.SECOND_SERVICE:
+                messagePayload = { content: data.content, nextStage: C.THIRD_SERVICE, retryCount: data.retryCount + 1 }; // Adjusted for example
                 break;
-            case 'topic-service-topic':
+            case C.THIRD_SERVICE:
                 messagePayload = { content: data.content, nextStage: '', retryCount: data.retryCount + 1 };
                 break;
             default:

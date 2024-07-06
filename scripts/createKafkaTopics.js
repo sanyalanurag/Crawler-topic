@@ -1,5 +1,6 @@
 const { Kafka } = require('kafkajs');
 
+const C = require('../constants');
 // Kafka configuration
 const kafka = new Kafka({
     clientId: 'my-app',
@@ -12,27 +13,27 @@ async function createTopics() {
     await admin.connect();
     const topics = [
         {
-            topic: 'scheduling-topic',
+            topic: C.ORCHESTRATOR,
             numPartitions: 1,
             replicationFactor: 1,
         },
         {
-            topic: 'link-content-topic',
+            topic: C.FIRST_SERVICE,
             numPartitions: 1,
             replicationFactor: 1,
         },
         {
-            topic: 'readability-service-topic',
+            topic: C.SECOND_SERVICE,
             numPartitions: 1,
             replicationFactor: 1,
         },
         {
-            topic: 'topic-service-topic',
+            topic: C.THIRD_SERVICE,
             numPartitions: 1,
             replicationFactor: 1,
         },
         {
-            topic: 'dead-letter-topic',
+            topic: C.DEAD_LETTER,
             numPartitions: 1,
             replicationFactor: 1,
         },

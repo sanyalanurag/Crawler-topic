@@ -1,9 +1,10 @@
+const C = require('../constants');
 const kafkaProducer = require('../kafkaProducer');
 const KafkaConsumer = require('../kafkaConsumer');
 
-class SchedulerService {
-    static async listenToReadabilityServiceTopic() {
-        const consumer = await KafkaConsumer.getConsumer({topic: 'readability-service-topic', groupId: 'readability-service-group'});
+class DataProcessingService {
+    static async listenToTopic() {
+        const consumer = await KafkaConsumer.getConsumer({topic: C.SECOND_SERVICE, groupId: `${C.SECOND_SERVICE}-group`});
         
         await consumer.run({
             eachMessage: async ({ topic, partition, message }) => {
@@ -12,7 +13,7 @@ class SchedulerService {
                 try {
                     console.log('simulation readability processing');
 
-                    await kafkaProducer.produceMessage('scheduling-topic', {
+                    await kafkaProducer.produceMessage(C.ORCHESTRATOR, {
                         content: content,
                         nextStage: nextStage,
                     });
@@ -21,7 +22,7 @@ class SchedulerService {
                     console.error('Error processing message:', error.message);
                     const nextRetryCount = retryCount + 1;
 
-                    await kafkaProducer.produceMessage('scheduling-topic', {
+                    await kafkaProducer.produceMessage(C.ORCHESTRATOR, {
                         error: error.message,
                         nextStage: topic,
                         retryCount: nextRetryCount,
@@ -35,4 +36,4 @@ class SchedulerService {
     }
 }
 
-module.exports = SchedulerService;
+module.exports = DataProcessingService;

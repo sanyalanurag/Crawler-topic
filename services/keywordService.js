@@ -1,10 +1,11 @@
+const C = require('../constants');
 const TopicUtils = require('../utils/topicUtils');
 const kafkaProducer = require('../kafkaProducer');
 const KafkaConsumer = require('../kafkaConsumer');
 
-class TopicService {
-    static async listenToTopicServiceTopic() {
-        const consumer = await KafkaConsumer.getConsumer({topic: 'topic-service-topic', groupId: 'topic-service-group'});
+class KeywordService {
+    static async listenToTopic() {
+        const consumer = await KafkaConsumer.getConsumer({topic: C.THIRD_SERVICE, groupId: `${C.THIRD_SERVICE}-group`});
 
         await consumer.run({
             eachMessage: async ({ topic, partition, message }) => {
@@ -18,7 +19,7 @@ class TopicService {
                     console.error('Error processing message:', error.message);
                     const nextRetryCount = retryCount + 1;
 
-                    await kafkaProducer.produceMessage('scheduling-topic', {
+                    await kafkaProducer.produceMessage(C.ORCHESTRATOR, {
                         error: error.message,
                         nextStage: topic,
                         retryCount: nextRetryCount,
@@ -32,4 +33,4 @@ class TopicService {
     }
 }
 
-module.exports = TopicService;
+module.exports = KeywordService;

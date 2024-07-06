@@ -1,11 +1,12 @@
+const C = require('../constants');
 const MessageFactory = require('../utils/messageFactory');
 const KafkaProducer = require('../kafkaProducer');
 const KafkaConsumer = require('../kafkaConsumer');
 
 
 class SchedulerService {
-    static async listenToSchedulingTopic() {
-        const consumer = await KafkaConsumer.getConsumer({topic: 'scheduling-topic', groupId: 'scheduler-group'});
+    static async listenToTopic() {
+        const consumer = await KafkaConsumer.getConsumer({topic: C.ORCHESTRATOR, groupId: `${C.ORCHESTRATOR}-group`});
         
         await consumer.run({
             eachMessage: async ({ topic, partition, message }) => {
