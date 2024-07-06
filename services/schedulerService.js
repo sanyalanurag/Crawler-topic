@@ -5,11 +5,8 @@ const KafkaConsumer = require('../kafkaConsumer');
 
 class SchedulerService {
     static async listenToSchedulingTopic() {
-
         const consumer = await KafkaConsumer.getConsumer({topic: 'scheduling-topic', groupId: 'scheduler-group'});
-        await consumer.connect();
-        await consumer.subscribe({ topic: 'scheduling-topic', fromBeginning: true });
-
+        
         await consumer.run({
             eachMessage: async ({ topic, partition, message }) => {
                 const { content, link,  nextStage, retryCount = 0 } = JSON.parse(message.value.toString());

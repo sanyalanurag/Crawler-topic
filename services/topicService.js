@@ -1,12 +1,10 @@
 const TopicUtils = require('../utils/topicUtils');
-
+const kafkaProducer = require('../kafkaProducer');
+const KafkaConsumer = require('../kafkaConsumer');
 
 class TopicService {
     static async listenToTopicServiceTopic() {
         const consumer = await KafkaConsumer.getConsumer({topic: 'topic-service-topic', groupId: 'topic-service-group'});
-
-        await consumer.connect();
-        await consumer.subscribe({ topic: 'topic-service-topic', fromBeginning: true });
 
         await consumer.run({
             eachMessage: async ({ topic, partition, message }) => {

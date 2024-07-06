@@ -6,8 +6,8 @@ const JSDOM = require('jsdom');
 class SchedulerService {
     static async listenToReadabilityServiceTopic() {
         const consumer = await KafkaConsumer.getConsumer({topic: 'readability-service-topic', groupId: 'readability-service-group'});
-        await consumer.connect();
-        await consumer.subscribe({ topic: 'readability-service-topic', fromBeginning: true });
+        // await consumer.connect();
+        // await consumer.subscribe({ topic: 'readability-service-topic', fromBeginning: true });
 
         await consumer.run({
             eachMessage: async ({ topic, partition, message }) => {

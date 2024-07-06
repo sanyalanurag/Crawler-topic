@@ -9,9 +9,7 @@ class LinkService {
 static async listenToLinkContentTopic() {
 
     const consumer = await KafkaConsumer.getConsumer({topic: 'link-content-topic', groupId: 'link-service-group'});
-    await consumer.connect();
-    await consumer.subscribe({ topic: 'link-content-topic', fromBeginning: true });
-
+    
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
             const { link, nextStage,  retryCount = 1 } = JSON.parse(message.value.toString());

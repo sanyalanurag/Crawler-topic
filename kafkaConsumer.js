@@ -9,6 +9,8 @@ const kafka = new Kafka({
 class KafkaConsumer {
     static async  getConsumer({topic, groupId}) {
         const consumer = kafka.consumer({ groupId });
+        await consumer.connect();
+        await consumer.subscribe({ topic, fromBeginning: true });
         return consumer;
     }
 }
