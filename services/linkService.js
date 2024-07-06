@@ -9,7 +9,7 @@ class LinkService {
 static async listenToLinkContentTopic() {
 
     const consumer = await KafkaConsumer.getConsumer({topic: 'link-content-topic', groupId: 'link-service-group'});
-    
+
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
             const { link, nextStage,  retryCount = 1 } = JSON.parse(message.value.toString());
@@ -47,7 +47,6 @@ static async listenToLinkContentTopic() {
             let reader = new Readability(doc.window.document);
             let article = reader.parse();
             const textContent = article.textContent;
-            // console.log("content", content);
             return textContent;
         } catch (error) {
             throw new Error(`Failed to fetch and parse link: ${error.message}`);
