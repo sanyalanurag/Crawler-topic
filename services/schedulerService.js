@@ -12,7 +12,6 @@ class SchedulerService {
             eachMessage: async ({ topic, partition, message }) => {
                 const { content, link,  nextStage, retryCount = 0 } = JSON.parse(message.value.toString());
 
-                console.log(content, link, nextStage);
                 console.log(`Attempting to process message (retryCount: ${retryCount})`);
                 console.log("Data written to DB");
 

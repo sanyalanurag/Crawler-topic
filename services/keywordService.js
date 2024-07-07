@@ -12,9 +12,9 @@ class KeywordService {
                 const { content, nextStage, retryCount = 1 } = JSON.parse(message.value.toString());
                 
                 try {
-                    console.log(`Processing message in TopicService (Retrycount ${retryCount}):`, content);
+                    console.log(`Processing message in Keword Service (Retrycount ${retryCount}):`);
                     const topics = TopicUtils.extractTopics(content);
-                    console.log('Topic extracted successfully', topics);
+                    console.log('Keywords extracted successfully', topics);
                 } catch (error) {
                     console.error('Error processing message:', error.message);
                     const nextRetryCount = retryCount + 1;

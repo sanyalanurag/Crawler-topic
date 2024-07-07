@@ -42,7 +42,6 @@ static async listenToTopic() {
     static async fetchAndParseLink(link) {
         try {
             const linkData = await axios.get(link);
-            console.log(linkData);
             const content = linkData.data;
 
             const doc = new JSDOM(content);
