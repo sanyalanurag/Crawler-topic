@@ -18,8 +18,6 @@ This repository contains both Python and Node.js code to simulate a multi-stage 
   - [Data Processing Service](#data-processing-service)
   - [Keyword Extractor Service](#keyword-extractor-service)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
