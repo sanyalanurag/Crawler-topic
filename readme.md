@@ -82,7 +82,7 @@ Start the application by running:
 ```sh
 node app.js
 ```
-The app will listen on port 3000 and contains a `submit-link` route that will accept a POST request with the following body:
+The app will listen on port 3000 and contains a `/app/submit-link` route that will accept a POST request with the following body:
 ```json
 {
   "link": "www.abc.com"
